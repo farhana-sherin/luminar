@@ -8,7 +8,7 @@ export const MainLayout = () => {
   return (
     <div>
       <Header />
-      <main className="pt-6 pb-24 lg:pt-24 lg:pb-0">
+      <main className="pb-24 md:pb-0">
         <Outlet />
       </main>
       <Footer />
