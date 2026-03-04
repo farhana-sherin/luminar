@@ -19,24 +19,28 @@ export const Header = () => {
       </button>
 
       <header className="fixed inset-x-0 bottom-4 z-50 px-4 md:bottom-auto md:top-4 md:px-6 lg:px-8">
-      <div className="relative max-w-7xl mx-auto rounded-2xl border border-gray-200 bg-white/95 backdrop-blur shadow-lg">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl border border-white/35 bg-white/20 shadow-[0_18px_40px_-18px_rgba(15,23,42,0.55)] backdrop-blur-xl md:border-gray-200 md:bg-white/95 md:shadow-lg">
+        <div className="pointer-events-none absolute inset-0 md:hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.48)_0%,rgba(255,255,255,0.2)_42%,rgba(255,255,255,0.08)_100%)]" />
+          <div className="absolute -left-8 top-0 h-12 w-40 rotate-6 bg-white/30 blur-xl" />
+        </div>
         
-        <div className="flex items-center justify-between h-16">
+        <div className="relative flex h-16 items-center justify-between">
           
           {/* Left Section */}
-          <div className="flex items-center gap-3 sm:gap-4 px-3 sm:px-4 lg:px-6">
+          <div className="flex w-full items-center justify-between gap-2 px-2 sm:px-4 lg:px-6">
 
             {/* Logo */}
-            <h1 className="text-base font-semibold text-gray-800 tracking-wide sm:text-xl">
+            <h1 className="flex-none text-base font-semibold tracking-wide text-gray-800 sm:text-xl">
               Lumiya
             </h1>
 
             {/* Navigation */}
-            <nav className="flex items-center justify-center gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-6 text-xs lg:text-sm font-medium text-gray-600">
+            <nav className="ml-1 flex flex-1 items-center justify-evenly gap-1 text-xs font-medium text-gray-600 sm:gap-1.5 md:ml-0 md:flex-none md:justify-center md:gap-2.5 lg:gap-6 lg:text-sm">
               <a
                 href="#"
                 aria-label="Dashboard"
-                className="flex h-9 w-9 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 sm:h-10 sm:w-10 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
               >
                 <LayoutDashboard size={18} className="lg:hidden" />
                 <span className="hidden lg:inline">Dashboard</span>
@@ -44,7 +48,7 @@ export const Header = () => {
               <a
                 href="#"
                 aria-label="Products"
-                className="flex h-9 w-9 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 sm:h-10 sm:w-10 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
               >
                 <ShoppingBag size={18} className="lg:hidden" />
                 <span className="hidden lg:inline">Products</span>
@@ -52,7 +56,7 @@ export const Header = () => {
               <a
                 href="#"
                 aria-label="Rentals"
-                className="flex h-9 w-9 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 sm:h-10 sm:w-10 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
               >
                 <CalendarClock size={18} className="lg:hidden" />
                 <span className="hidden lg:inline">Rentals</span>
@@ -61,14 +65,14 @@ export const Header = () => {
                 type="button"
                 aria-label="Search"
                 onClick={() => setShowMobileSearch((prev) => !prev)}
-                className="flex h-10 w-10 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 md:hidden"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 md:hidden"
               >
                 <Search size={18} />
               </button>
               <button
                 type="button"
                 aria-label="Notifications"
-                className="relative flex h-10 w-10 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 md:hidden"
+                className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 md:hidden"
               >
                 <Bell size={18} />
                 <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-pink-500" />

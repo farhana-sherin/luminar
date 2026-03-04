@@ -3,7 +3,7 @@ import { ArrowRight, Boxes, CalendarClock, UsersRound } from "lucide-react";
 
 export const Hero = () => {
   return (
-    <section className="relative flex min-h-[66vh] items-center overflow-hidden px-4 pb-16 pt-4 sm:pt-8 md:pt-10 lg:min-h-[56vh] lg:pb-12 xl:min-h-[62vh]">
+    <section className="relative flex min-h-[66vh] items-center overflow-hidden px-4  pt-4 sm:pt-8 md:pt-10 lg:min-h-[56vh] lg:pb-12 xl:min-h-[62vh]">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -left-32 top-0 h-80 w-80 rounded-full bg-orange-200/55 blur-3xl" />
         <div className="absolute right-0 top-24 h-96 w-96 rounded-full bg-rose-200/45 blur-3xl" />
@@ -14,7 +14,7 @@ export const Hero = () => {
       <div className="mx-auto w-full max-w-7xl">
         <div className="grid items-center gap-8 xl:grid-cols-[1.05fr_0.95fr] xl:gap-12 2xl:gap-16">
           <div className="space-y-6 text-center xl:text-left">
-            <p className="hero-fade-up inline-flex items-center rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white">
+            <p className="hero-fade-up inline-flex items-center rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase text-white">
               For Shop Owners
             </p>
 
@@ -41,16 +41,16 @@ export const Hero = () => {
           </div>
 
           <div className="hero-fade-up hero-delay-2 flex w-full justify-center xl:justify-end">
-            <div className="relative w-full max-w-[32rem]">
+            <div className="relative w-full max-w-lg">
               <img
                 src="/images/dress.png"
                 alt="Primary bridal dress"
-                className="hero-float h-[280px] w-full object-contain sm:h-[340px] md:h-[380px] lg:h-[360px] xl:h-[500px]"
+                className="hero-float h-70 w-full object-contain sm:h-85 md:h-95 lg:h-90 xl:h-125"
               />
               <img
                 src="/images/dress.png"
                 alt="Secondary bridal dress"
-                className="hero-float-tilt pointer-events-none absolute -bottom-2 left-2 h-[170px] w-[48%] object-contain opacity-90 sm:h-[200px] sm:w-[44%] md:h-[220px] md:w-[42%] lg:h-[210px] lg:w-[40%]"
+                className="hero-float-tilt pointer-events-none absolute -bottom-2 left-2 h-42.5 w-[48%] object-contain opacity-90 sm:h-50 sm:w-[44%] md:h-55 md:w-[42%] lg:h-52.5 lg:w-[40%]"
               />
             </div>
           </div>
