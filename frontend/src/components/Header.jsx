@@ -41,7 +41,6 @@ export const Header = () => {
                 <CalendarClock size={18} className="sm:hidden" />
                 <span className="hidden sm:inline">Rentals</span>
               </a>
-              
             </nav>
           </div>
 
