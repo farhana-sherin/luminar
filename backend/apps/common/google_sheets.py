@@ -16,11 +16,16 @@ client = gspread.authorize(creds)
 sheet = client.open("DressBookingsTest").sheet1
 
 
-def add_booking(data):
+def add_booking(booking):
     sheet.append_row([
-        data["booking_id"],
-        data["user"],
-        data["dress"],
-        data["date"],
-        data["status"]
+        booking.id,
+        booking.customer_name,
+        booking.mobile_number,
+        booking.place,
+        booking.dress.name,
+        str(booking.start_date),
+        str(booking.end_date),
+        booking.total_days,
+        float(booking.total_amount),
+        booking.returned
     ])
