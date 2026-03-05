@@ -1,30 +1,72 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from apps.bookings.models import Booking
-from apps.dresses.models import Dress
-from apps.common.google_sheets import add_booking
+
+from dresses.models import Dress
+from .models import Booking
+from .services import is_dress_availabe
+
+from datetime import datetime
 
 
-@api_view(["POST"])
+@api_view(['POST'])
 def create_booking(request):
 
-    dress = Dress.objects.get(id=request.data.get("dress_id"))
+    dress_id = request.data.get("dress_id")
 
-    booking = Booking.objects.create(
-        dress=dress,
-        customer_name=request.data.get("customer_name"),
-        mobile_number=request.data.get("mobile_number"),
-        place=request.data.get("place"),
-        start_date=request.data.get("start_date"),
-        end_date=request.data.get("end_date"),
-        total_days=request.data.get("total_days"),
-        total_amount=request.data.get("total_amount"),
+    start_date = request.data.get("start_date")
+
+    end_date = request.data.get("end_date")
+
+    dress = Dress.objects.get(id=dress_id)
+
+    start_date = datetime.strptime(
+        start_date,
+        "%Y-%m-%d"
+    ).date()
+
+    end_date = datetime.strptime(
+        end_date,
+        "%Y-%m-%d"
+    ).date()
+
+    available = is_dress_availabe(
+        dress,
+        start_date,
+        end_date
     )
 
-    # send booking to google sheet
-    add_booking(booking)
+    if not available:
+
+        return Response({
+            "error": "Dress already booked"
+        })
+
+    days = (end_date - start_date).days
+
+    total_price = days * dress.price_per_day
+
+    booking = Booking.objects.create(
+
+        dress=dress,
+
+        customer_name=request.data.get("customer_name"),
+
+        mobile=request.data.get("mobile"),
+
+        place=request.data.get("place"),
+
+        start_date=start_date,
+
+        end_date=end_date,
+
+        total_days=days,
+
+        total_price=total_price
+    )
 
     return Response({
-        "message": "Booking created successfully",
+
+        "message": "Booking successful",
+
         "booking_id": booking.id
     })
