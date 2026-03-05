@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.dresses',
     'apps.bookings',
-    "apps.common",
+    'apps.categories',
+    'apps.common',
     
 ]
 
