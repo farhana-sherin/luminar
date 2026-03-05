@@ -6,6 +6,7 @@ from .models import Booking
 from .services import is_dress_availabe
 
 from datetime import datetime
+from apps.common.google_sheets import add_booking
 
 
 @api_view(['POST'])
@@ -63,6 +64,8 @@ def create_booking(request):
 
         total_price=total_price
     )
+
+    add_booking(booking)
 
     return Response({
 

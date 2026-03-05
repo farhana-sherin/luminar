@@ -20,12 +20,11 @@ def add_booking(booking):
     sheet.append_row([
         booking.id,
         booking.customer_name,
-        booking.mobile_number,
+        booking.mobile,
         booking.place,
         booking.dress.name,
         str(booking.start_date),
         str(booking.end_date),
         booking.total_days,
-        float(booking.total_amount),
-        booking.returned
+        float(booking.total_price)
     ])
