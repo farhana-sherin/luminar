@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.dresses',
     'apps.bookings',
+    "apps.common",
     
 ]
 
@@ -109,6 +110,10 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 
