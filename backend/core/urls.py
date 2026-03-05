@@ -10,6 +10,8 @@ urlpatterns = [
 
     path("api/user/", include("apps.users.urls")),
     path("api/dresses/", include("apps.dresses.urls")),
+    path("api/bookings/", include("apps.bookings.urls")),
+    path("api/categories/", include("apps.categories.urls"))
 ]
 if settings.DEBUG:
     urlpatterns += static(
