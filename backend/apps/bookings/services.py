@@ -8,11 +8,9 @@ def is_dress_available(dress, start_date, end_date):
     for the given date range
     """
 
-    overlap = Booking.objects.filter(
-        dress=dress,
+    return not Booking.objects.filter(
+        dress_id=dress.id,
+        returned=False,
         start_date__lte=end_date,
-        end_date__gte=start_date,
-        returned=False
+        end_date__gte=start_date
     ).exists()
-
-    return not overlap
