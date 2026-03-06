@@ -12,7 +12,7 @@ urlpatterns = [
 
 path("create/", create_category),
 
-path("", list_categories),
+path("list/", list_categories),
 
 path("update/<int:category_id>/", update_category),
 
