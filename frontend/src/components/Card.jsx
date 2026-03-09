@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import dressesApiCall from "../api/dresses.api";
 
 export default function Card() {
+  const navigate = useNavigate();
   const [dresses, setDresses] = useState([]);
   const [category, setCategory] = useState([]);
 
@@ -65,10 +67,11 @@ export default function Card() {
         {dresses.map((dress) => (
           <article
             key={dress.id}
-            className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:-translate-y-0.5 hover:shadow-lg transition"
+            onClick={() => navigate(`/dress/${dress.id}`)}
+            className="group cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:-translate-y-0.5 hover:shadow-lg transition"
           >
             {/* Image */}
-            <div className="relative aspect-[3/3] overflow-hidden bg-slate-100">
+            <div className="relative aspect-3/3 overflow-hidden bg-slate-100">
               <img
                 src={`http://127.0.0.1:8000${dress.image}`}
                 alt={dress.name}
@@ -104,7 +107,14 @@ export default function Card() {
                   </p>
                 </div>
 
-                <button className="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800">
+                <button
+                  type="button"
+                  className="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/dress/${dress.id}`);
+                  }}
+                >
                   Rent
                 </button>
               </div>
