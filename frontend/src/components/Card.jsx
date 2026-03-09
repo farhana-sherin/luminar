@@ -59,13 +59,13 @@ export default function Card() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         {dressDesigns.map((dress) => (
           <article
             key={dress.id}
             className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
           >
-            <div className="relative aspect-[4/4] overflow-hidden bg-slate-100">
+            <div className="relative aspect-[3/3] overflow-hidden bg-slate-100">
               <img
                 src={dress.image}
                 alt={dress.name}
@@ -75,11 +75,10 @@ export default function Card() {
                 Rent
               </span>
               <span
-                className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-                  dress.isBooked
-                    ? "bg-red-500 text-white"
-                    : "bg-emerald-500 text-white"
-                }`}
+                className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold ${dress.isBooked
+                  ? "bg-red-500 text-white"
+                  : "bg-emerald-500 text-white"
+                  }`}
               >
                 {dress.isBooked ? "Booked" : "Available"}
               </span>
@@ -105,11 +104,10 @@ export default function Card() {
                 <button
                   type="button"
                   disabled={dress.isBooked}
-                  className={`rounded-md px-3 py-1.5 text-xs font-semibold ${
-                    dress.isBooked
-                      ? "cursor-not-allowed bg-slate-200 text-slate-500"
-                      : "bg-slate-900 text-white transition hover:bg-slate-800"
-                  }`}
+                  className={`rounded-md px-3 py-1.5 text-xs font-semibold ${dress.isBooked
+                    ? "cursor-not-allowed bg-slate-200 text-slate-500"
+                    : "bg-slate-900 text-white transition hover:bg-slate-800"
+                    }`}
                 >
                   {dress.isBooked ? "Booked" : "Rent"}
                 </button>
