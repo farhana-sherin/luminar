@@ -4,6 +4,7 @@ import { Home } from "../pages/Home";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard";
 import Dresses from "../components/dashboard/Dresses";
+import DressDetail from "../pages/DressDetail";
 
 export const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "dress/:id",
+        element: <DressDetail />,
       },
     ],
   },
