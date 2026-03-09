@@ -9,3 +9,13 @@ export default async function dressesApiCall() {
     throw error;
   }
 }
+
+export const createDress = async (formData) => {
+  const { data } = await axios.post("/dresses/create/", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return data;
+};

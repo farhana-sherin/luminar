@@ -3,6 +3,7 @@ import { MainLayout } from "../Layouts/MainLayout";
 import { Home } from "../pages/Home";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard";
+import Dresses from "../components/dashboard/Dresses";
 
 export const router = createBrowserRouter([
   {
@@ -20,8 +21,12 @@ export const router = createBrowserRouter([
     element: <DashboardLayout />,
      children: [
       {
-        path: "/dashboard",
+        index: true,
         element: <Dashboard />
+      },
+      {
+        path: "dresses",
+        element: <Dresses />
       }
      ]
   }

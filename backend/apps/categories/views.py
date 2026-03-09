@@ -1,12 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from .models import Category
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_category(request):
 
     name = request.data.get("name")
@@ -33,7 +33,7 @@ def create_category(request):
 #  show all categories
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def list_categories(request):
 
     categories = Category.objects.all()
@@ -55,7 +55,7 @@ def list_categories(request):
 # update category
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def update_category(request, category_id):
 
     try:
@@ -82,7 +82,7 @@ def update_category(request, category_id):
 # delete category
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def delete_category(request, category_id):
 
     try:

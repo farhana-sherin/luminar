@@ -3,12 +3,20 @@ import dressesApiCall from "../api/dresses.api";
 
 export default function Card() {
   const [dresses, setDresses] = useState([]);
+  const [category, setCategory] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await dressesApiCall();
         setDresses(response);
+
+        // unique categories
+        const uniqueCategories = [
+          ...new Set(response.map((item) => item.category_name)),
+        ];
+
+        setCategory(uniqueCategories);
       } catch (error) {
         console.log(error);
       }
@@ -19,7 +27,9 @@ export default function Card() {
 
   return (
     <section className="space-y-5 pb-3">
-      <div className="flex items-end justify-between gap-3">
+      <div className="flex items-end justify-between gap-3 flex-wrap">
+        
+        {/* Left Title */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
             Inventory
@@ -29,11 +39,28 @@ export default function Card() {
           </h2>
         </div>
 
-        <button className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-slate-400 hover:bg-slate-50">
-          View all
-        </button>
+        {/* Right Controls */}
+        <div className="flex items-center gap-2 flex-wrap">
+
+          {/* Category Buttons */}
+          {category.map((cat, index) => (
+            <button
+              key={index}
+              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-slate-400 hover:bg-red-300"
+            >
+              {cat}
+            </button>
+          ))}
+
+          {/* View All Button */}
+          <button className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-slate-400 hover:bg-red-300">
+            View all
+          </button>
+
+        </div>
       </div>
 
+      {/* Dresses Grid */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         {dresses.map((dress) => (
           <article

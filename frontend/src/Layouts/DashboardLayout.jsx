@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { Menu } from "lucide-react";
-import Sidebar from "../components/SiderBar";
+import Sidebar from "../components/dashboard/SiderBar";
 
 export default function DashboardLayout() {
 
