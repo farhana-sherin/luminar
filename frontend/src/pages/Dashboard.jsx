@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingBag, ClipboardList, CheckCircle } from "lucide-react";
+import { getRecentOrders } from "../api/orders.api";
 
 export default function Dashboard() {
-  const recentOrders = [
-    { id: "#1021", customer: "Rahul", item: "Pizza", total: "₹450", status: "Completed" },
-    { id: "#1022", customer: "Anjali", item: "Burger", total: "₹250", status: "Pending" },
-    { id: "#1023", customer: "Aman", item: "Pasta", total: "₹350", status: "Completed" },
-    { id: "#1024", customer: "Priya", item: "Fried Rice", total: "₹300", status: "Preparing" },
-    { id: "#1025", customer: "Vikram", item: "Sandwich", total: "₹200", status: "Completed" },
-  ];
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      try {
+        const data = await getRecentOrders(5);
+        setRecentOrders(data || []);
+      } catch {
+        setRecentOrders([]);
+      } finally {
+        setLoadingOrders(false);
+      }
+    };
+
+    fetchRecent();
+  }, []);
 
   return (
     <div className="p-8 bg-slate-50 min-h-screen">
@@ -25,7 +36,7 @@ export default function Dashboard() {
       <div className="grid md:grid-cols-3 gap-6 mb-10">
 
         {/* Total Orders */}
-        <div className="bg-gradient-to-r from-pink-100 to-pink-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
+        <div className="bg-linear-to-r from-pink-100 to-pink-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
           <div>
             <h2 className="text-sm text-gray-500">Total Orders</h2>
             <p className="text-3xl font-bold mt-2 text-gray-800">120</p>
@@ -36,7 +47,7 @@ export default function Dashboard() {
         </div>
 
         {/* Total Bookings */}
-        <div className="bg-gradient-to-r from-purple-100 to-purple-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
+        <div className="bg-linear-to-r from-purple-100 to-purple-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
           <div>
             <h2 className="text-sm text-gray-500">Total Bookings</h2>
             <p className="text-3xl font-bold mt-2 text-gray-800">85</p>
@@ -47,7 +58,7 @@ export default function Dashboard() {
         </div>
 
         {/* Completed Orders */}
-        <div className="bg-gradient-to-r from-green-100 to-green-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
+        <div className="bg-linear-to-r from-green-100 to-green-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
           <div>
             <h2 className="text-sm text-gray-500">Completed Orders</h2>
             <p className="text-3xl font-bold mt-2 text-gray-800">60</p>
@@ -72,41 +83,77 @@ export default function Dashboard() {
           <thead>
             <tr className="text-gray-500 border-b text-sm">
               <th className="py-3">Order ID</th>
+              <th>Dress</th>
               <th>Customer</th>
-              <th>Item</th>
               <th>Total</th>
               <th>Status</th>
             </tr>
           </thead>
 
           <tbody>
-            {recentOrders.map((order) => (
-              <tr
-                key={order.id}
-                className="border-b last:border-none hover:bg-gray-50 transition"
-              >
-                <td className="py-4 font-medium text-gray-700">{order.id}</td>
-                <td>{order.customer}</td>
-                <td>{order.item}</td>
-                <td className="font-medium">{order.total}</td>
-
-                <td>
-                  <span
-                    className={`text-xs px-3 py-1 rounded-full font-medium
-                      ${
-                        order.status === "Completed"
-                          ? "bg-green-100 text-green-600"
-                          : order.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-600"
-                          : "bg-blue-100 text-blue-600"
-                      }`}
-                  >
-                    {order.status}
-                  </span>
+            {loadingOrders ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="py-4 text-center text-xs text-gray-500"
+                >
+                  Loading recent orders...
                 </td>
-
               </tr>
-            ))}
+            ) : recentOrders.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="py-4 text-center text-xs text-gray-500"
+                >
+                  No recent orders found.
+                </td>
+              </tr>
+            ) : (
+              recentOrders.map((order) => {
+                const statusLabel = order.returned ? "Returned" : "Active";
+                const statusClass = order.returned
+                  ? "bg-green-100 text-green-600"
+                  : "bg-blue-100 text-blue-600";
+
+                return (
+                  <tr
+                    key={order.id}
+                    className="border-b last:border-none hover:bg-gray-50 transition"
+                  >
+                    <td className="py-4 font-medium text-gray-700">
+                      #{order.id}
+                    </td>
+                    <td>
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-semibold text-slate-800">
+                          {order.dress_name}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {order.dress_code} • {order.category}
+                        </p>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="space-y-0.5">
+                        <p>{order.customer_name}</p>
+                        <p className="text-xs text-slate-500">
+                          {order.mobile_number}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="font-medium">₹ {order.total_amount}</td>
+                    <td>
+                      <span
+                        className={`text-xs px-3 py-1 rounded-full font-medium ${statusClass}`}
+                      >
+                        {statusLabel}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
 

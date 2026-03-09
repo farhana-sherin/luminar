@@ -5,6 +5,7 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard";
 import Dresses from "../components/dashboard/Dresses";
 import DressDetail from "../pages/DressDetail";
+import Orders from "../pages/Orders";
 
 export const router = createBrowserRouter([
   {
@@ -24,16 +25,19 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardLayout />,
-     children: [
+    children: [
       {
         index: true,
-        element: <Dashboard />
+        element: <Dashboard />,
       },
       {
         path: "dresses",
-        element: <Dresses />
-      }
-     ]
-  }
-  
+        element: <Dresses />,
+      },
+      {
+        path: "orders",
+        element: <Orders />,
+      },
+    ],
+  },
 ]);
