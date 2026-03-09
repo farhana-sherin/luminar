@@ -21,7 +21,7 @@ export default function AddDressForm({ onClose, onSuccess }) {
   };
 
   const onSubmit = async (data) => {
-    console.log(data, "=====")
+
     try {
       const formData = new FormData();
 
