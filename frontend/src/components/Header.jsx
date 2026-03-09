@@ -1,14 +1,21 @@
 import { useState } from "react";
 import { Bell, Search, LayoutDashboard, ShoppingBag, CalendarClock } from "lucide-react";
+import { Link, NavLink } from "react-router-dom";
 
 export const Header = () => {
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const navItemClass = ({ isActive }) =>
+    `flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent ${
+      isActive
+        ? "bg-pink-100 text-pink-700 lg:bg-transparent lg:text-pink-600"
+        : "hover:bg-pink-50 hover:text-pink-600"
+    }`;
 
   return (
     <>
-      <button
-        type="button"
-        aria-label="Profile"
+      <Link
+        to="/dashboard"
+        aria-label="Open admin dashboard"
         className="fixed top-4 right-4 z-[60] md:hidden rounded-full border border-gray-200 bg-white p-1.5 shadow-md"
       >
         <img
@@ -16,7 +23,7 @@ export const Header = () => {
           alt="admin"
           className="h-8 w-8 rounded-full object-cover"
         />
-      </button>
+      </Link>
 
       <header className="fixed inset-x-0 bottom-4 z-50 px-4 md:bottom-auto md:top-4 md:px-6 lg:px-8">
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl border border-white/35 bg-white/20 shadow-[0_18px_40px_-18px_rgba(15,23,42,0.55)] backdrop-blur-xl md:border-gray-200 md:bg-white/95 md:shadow-lg">
@@ -37,30 +44,30 @@ export const Header = () => {
 
             {/* Navigation */}
             <nav className="ml-1 flex flex-1 items-center justify-evenly gap-1 text-xs font-medium text-gray-600 sm:gap-1.5 md:ml-0 md:flex-none md:justify-center md:gap-2.5 lg:gap-6 lg:text-sm">
-              <a
-                href="#"
+              <NavLink
+                to="/dashboard"
                 aria-label="Dashboard"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
+                className={navItemClass}
               >
                 <LayoutDashboard size={18} className="lg:hidden" />
                 <span className="hidden lg:inline">Dashboard</span>
-              </a>
-              <a
-                href="#"
+              </NavLink>
+              <NavLink
+                to="/dashboard/products/add"
                 aria-label="Products"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
+                className={navItemClass}
               >
                 <ShoppingBag size={18} className="lg:hidden" />
                 <span className="hidden lg:inline">Products</span>
-              </a>
-              <a
-                href="#"
+              </NavLink>
+              <NavLink
+                to="/dashboard"
                 aria-label="Rentals"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition hover:bg-pink-50 hover:text-pink-600 lg:h-auto lg:w-auto lg:rounded-none lg:hover:bg-transparent"
+                className={navItemClass}
               >
                 <CalendarClock size={18} className="lg:hidden" />
                 <span className="hidden lg:inline">Rentals</span>
-              </a>
+              </NavLink>
               <button
                 type="button"
                 aria-label="Search"
@@ -110,7 +117,7 @@ export const Header = () => {
             </button>
 
             {/* Profile */}
-            <div className="flex items-center gap-2 cursor-pointer">
+            <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer rounded-lg px-1 py-1 hover:bg-pink-50">
               <img
                 src="https://i.pravatar.cc/40"
                 alt="admin"
@@ -119,7 +126,7 @@ export const Header = () => {
               <span className="hidden xl:block text-sm font-medium text-gray-700">
                 Admin
               </span>
-            </div>
+            </Link>
           </div>
         </div>
 

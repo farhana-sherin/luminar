@@ -25,6 +25,7 @@ export const StartupSplash = ({ onComplete }) => {
       window.clearTimeout(completeTimer);
     };
   }, [onComplete]);
+  
 
   return (
     <div
