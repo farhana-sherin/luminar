@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Bell, Search, LayoutDashboard, ShoppingBag, CalendarClock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   const [showMobileSearch, setShowMobileSearch] = useState(false);
@@ -111,14 +112,11 @@ export const Header = () => {
 
             {/* Profile */}
             <div className="flex items-center gap-2 cursor-pointer">
-              <img
-                src="https://i.pravatar.cc/40"
-                alt="admin"
-                className="w-9 h-9 rounded-full object-cover"
-              />
+              <Link to={"/dashboard"}>
               <span className="hidden xl:block text-sm font-medium text-gray-700">
                 Admin
               </span>
+              </Link>
             </div>
           </div>
         </div>
