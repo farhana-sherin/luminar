@@ -10,6 +10,7 @@ export default function DashboardLayout() {
   return (
     <div className="flex bg-slate-50 min-h-screen">
 
+
       <Sidebar open={open} setOpen={setOpen} />
 
       <div className="flex-1 flex flex-col">
