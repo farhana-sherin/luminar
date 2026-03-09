@@ -6,7 +6,7 @@ from .serializers import DressSerializer
 from rest_framework.permissions import AllowAny
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_dress(request):
 
     serializer = DressSerializer(data=request.data)
