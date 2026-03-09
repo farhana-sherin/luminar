@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Dress
 from .serializers import DressSerializer
-
+from rest_framework.permissions import AllowAny
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -26,7 +26,7 @@ def create_dress(request):
     })
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def list_dresses(request):
 
     dresses = Dress.objects.all().order_by("-created_at")
