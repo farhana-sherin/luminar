@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 
 import { getDressDetail } from "../api/dresses.api";
 import { createBooking } from "../api/booking.api";
+import toast from "react-hot-toast";
 
 export default function DressDetail() {
   const { id } = useParams();
@@ -45,6 +46,8 @@ export default function DressDetail() {
 
       const res = await createBooking(payload);
 
+      toast.success("Dress booking confirm")
+
       setSuccessMessage(res?.message || "Booking successful");
       setError("");
       reset();
@@ -53,6 +56,8 @@ export default function DressDetail() {
         err?.response?.data?.message ||
           "Booking failed. Please check details."
       );
+
+      toast.error("Booking failed")
     }
   };
 
