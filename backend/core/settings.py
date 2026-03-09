@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
 
     # third party apps
     'rest_framework',
@@ -33,6 +34,8 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.dresses',
     'apps.bookings',
+    'apps.categories',
+    'apps.common',
     
 ]
 
@@ -109,6 +112,13 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 
