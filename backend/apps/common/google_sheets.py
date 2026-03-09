@@ -7,16 +7,14 @@ SCOPES = [
 ]
 
 creds = Credentials.from_service_account_file(
-    "credentials.json",
-    scopes=SCOPES
+    "credentials.json", scopes=SCOPES
 )
 
 client = gspread.authorize(creds)
-
 sheet = client.open("DressBookingsTest").sheet1
 
 
-def add_booking(booking):
+def setup_sheet_design():
 
     headers = [
         "Booking ID",
@@ -25,7 +23,7 @@ def add_booking(booking):
         "Place",
         "Dress Code",
         "Dress",
-         "Created At",
+        "Booked Date",
         "Start Date",
         "End Date",
         "Total Days",
@@ -33,14 +31,163 @@ def add_booking(booking):
         "Returned"
     ]
 
-    # check first row
     if not sheet.row_values(1):
         sheet.append_row(headers)
 
-    
+    # Header style
     sheet.format("A1:L1", {
-    "textFormat": {"bold": True}
-})
+        "backgroundColor": {
+            "red": 0.10,
+            "green": 0.10,
+            "blue": 0.10
+        },
+        "horizontalAlignment": "CENTER",
+        "verticalAlignment": "MIDDLE",
+        "textFormat": {
+            "foregroundColor": {"red": 1, "green": 1, "blue": 1},
+            "bold": True,
+            "fontSize": 11
+        }
+    })
+
+    sheet.freeze(rows=1)
+
+    # remove extra columns
+    sheet_info = sheet.spreadsheet.fetch_sheet_metadata()
+    column_count = sheet_info["sheets"][0]["properties"]["gridProperties"]["columnCount"]
+
+    if column_count > 12:
+        sheet.spreadsheet.batch_update({
+            "requests": [{
+                "deleteDimension": {
+                    "range": {
+                        "sheetId": 0,
+                        "dimension": "COLUMNS",
+                        "startIndex": 12,
+                        "endIndex": column_count
+                    }
+                }
+            }]
+        })
+
+    # apply light background only to rows with data
+    row_count = len(sheet.get_all_values())
+
+    if row_count > 1:
+        sheet.format(f"A2:K{row_count}", {
+            "backgroundColor": {
+                "red": 0.94,
+                "green": 0.94,
+                "blue": 0.94
+            }
+        })
+
+    # remove previous conditional rules
+    try:
+        sheet.spreadsheet.batch_update({
+            "requests": [
+                {"deleteConditionalFormatRule": {"sheetId": 0, "index": 0}},
+                {"deleteConditionalFormatRule": {"sheetId": 0, "index": 0}}
+            ]
+        })
+    except:
+        pass
+
+    # add new conditional formatting
+    sheet.spreadsheet.batch_update({
+        "requests": [
+
+            # TRUE → green
+            {
+                "addConditionalFormatRule": {
+                    "rule": {
+                        "ranges": [{
+                            "sheetId": 0,
+                            "startRowIndex": 1,
+                            "startColumnIndex": 11,
+                            "endColumnIndex": 12
+                        }],
+                        "booleanRule": {
+                            "condition": {
+                                "type": "TEXT_EQ",
+                                "values": [{"userEnteredValue": "TRUE"}]
+                            },
+                            "format": {
+                                "backgroundColor": {
+                                    "red": 0.80,
+                                    "green": 1.00,
+                                    "blue": 0.80
+                                },
+                                "textFormat": {
+                                    "bold": True,
+                                    "foregroundColor": {
+                                        "red": 0,
+                                        "green": 0.5,
+                                        "blue": 0
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "index": 0
+                }
+            },
+
+            # FALSE → light red
+            {
+                "addConditionalFormatRule": {
+                    "rule": {
+                        "ranges": [{
+                            "sheetId": 0,
+                            "startRowIndex": 1,
+                            "startColumnIndex": 11,
+                            "endColumnIndex": 12
+                        }],
+                        "booleanRule": {
+                            "condition": {
+                                "type": "TEXT_EQ",
+                                "values": [{"userEnteredValue": "FALSE"}]
+                            },
+                            "format": {
+                                "backgroundColor": {
+                                    "red": 1.00,
+                                    "green": 0.90,
+                                    "blue": 0.90
+                                },
+                                "textFormat": {
+                                    "bold": True,
+                                    "foregroundColor": {
+                                        "red": 0.7,
+                                        "green": 0,
+                                        "blue": 0
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "index": 1
+                }
+            }
+        ]
+    })
+
+    # align columns
+    sheet.format("A2:A1000", {"horizontalAlignment": "CENTER"})
+    sheet.format("C2:C1000", {"horizontalAlignment": "CENTER"})
+    sheet.format("G2:I1000", {"horizontalAlignment": "CENTER"})
+    sheet.format("J2:J1000", {"horizontalAlignment": "CENTER"})
+    sheet.format("K2:K1000", {"horizontalAlignment": "RIGHT"})
+    sheet.format("L2:L1000", {
+        "horizontalAlignment": "CENTER",
+        "textFormat": {"bold": True}
+    })
+
+
+def add_booking(booking):
+
+    if not sheet.row_values(1):
+        setup_sheet_design()
+
     sheet.append_row([
         booking.id,
         booking.customer_name,
@@ -48,13 +195,23 @@ def add_booking(booking):
         booking.place,
         booking.dress.code,
         booking.dress.name,
-        booking.created_at.strftime("%Y-%m-%d %H:%M"),
-        str(booking.start_date),
-        str(booking.end_date),
+        booking.created_at.strftime("%d-%m-%Y"),
+        booking.start_date.strftime("%d-%m-%Y"),
+        booking.end_date.strftime("%d-%m-%Y"),
         booking.total_days,
         float(booking.total_amount),
         booking.returned
     ])
+
+    last_row = len(sheet.get_all_values())
+
+    sheet.format(f"A{last_row}:K{last_row}", {
+        "backgroundColor": {
+            "red": 0.94,
+            "green": 0.94,
+            "blue": 0.94
+        }
+    })
 
 
 def update_return_status(booking):
@@ -64,6 +221,5 @@ def update_return_status(booking):
     for i, row in enumerate(records):
         if str(row[0]).strip() == str(booking.id):
 
-            # Column 12 = Returned
             sheet.update_cell(i + 1, 12, "TRUE")
             break
