@@ -34,7 +34,7 @@ export default function Sidebar({ open, setOpen }) {
         {/* Mobile Close */}
         <div className="flex items-center justify-between mb-8 md:hidden">
           <h1 className="text-xl font-bold text-pink-600">Dress Admin</h1>
-          <X onClick={() => setOpen(false)} className="cursor-pointer"/>
+          <X onClick={() => setOpen(false)} className="cursor-pointer" />
         </div>
 
         {/* Logo Desktop */}
@@ -53,11 +53,10 @@ export default function Sidebar({ open, setOpen }) {
                 key={item.path}
                 to={item.path}
                 className={`flex items-center gap-3 p-3 rounded-xl text-sm font-medium transition
-                ${
-                  active
+                ${active
                     ? "bg-white shadow text-pink-600"
                     : "text-gray-600 hover:bg-white hover:shadow"
-                }`}
+                  }`}
                 onClick={() => setOpen(false)}
               >
                 {item.icon}
