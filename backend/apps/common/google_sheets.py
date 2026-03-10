@@ -31,8 +31,21 @@ def setup_sheet_design():
         "Returned"
     ]
 
+    # Add headers if sheet empty
     if not sheet.row_values(1):
         sheet.append_row(headers)
+
+    # Reset header formatting first (important)
+    sheet.format("A1:L1", {
+        "textFormat": {
+            "foregroundColor": {
+                "red": 1,
+                "green": 1,
+                "blue": 1
+            }
+        },
+        "backgroundColor": {"red": 1, "green": 1, "blue": 1}
+    })
 
     # Header style
     sheet.format("A1:L1", {
@@ -44,17 +57,19 @@ def setup_sheet_design():
         "horizontalAlignment": "CENTER",
         "verticalAlignment": "MIDDLE",
         "textFormat": {
-    "foregroundColorStyle": {
-        "rgbColor": {"red": 1, "green": 1, "blue": 1}
-    },
-    "bold": True,
-    "fontSize": 11
-}
+            "foregroundColor": {
+                "red": 1,
+                "green": 1,
+                "blue": 1
+            },
+            "bold": True,
+            "fontSize": 11
+        }
     })
 
     sheet.freeze(rows=1)
 
-    # remove extra columns
+    # Remove extra columns
     sheet_info = sheet.spreadsheet.fetch_sheet_metadata()
     column_count = sheet_info["sheets"][0]["properties"]["gridProperties"]["columnCount"]
 
@@ -72,7 +87,7 @@ def setup_sheet_design():
             }]
         })
 
-    # apply light background only to rows with data
+    # Light background for rows with data
     row_count = len(sheet.get_all_values())
 
     if row_count > 1:
@@ -84,7 +99,7 @@ def setup_sheet_design():
             }
         })
 
-    # remove previous conditional rules
+    # Remove previous conditional rules
     try:
         sheet.spreadsheet.batch_update({
             "requests": [
@@ -95,7 +110,7 @@ def setup_sheet_design():
     except:
         pass
 
-    # add new conditional formatting
+    # Conditional formatting
     sheet.spreadsheet.batch_update({
         "requests": [
 
@@ -135,7 +150,7 @@ def setup_sheet_design():
                 }
             },
 
-            # FALSE → light red
+            # FALSE → red
             {
                 "addConditionalFormatRule": {
                     "rule": {
@@ -173,7 +188,7 @@ def setup_sheet_design():
         ]
     })
 
-    # align columns
+    # Align columns
     sheet.format("A2:A1000", {"horizontalAlignment": "CENTER"})
     sheet.format("C2:C1000", {"horizontalAlignment": "CENTER"})
     sheet.format("G2:I1000", {"horizontalAlignment": "CENTER"})
@@ -222,6 +237,5 @@ def update_return_status(booking):
 
     for i, row in enumerate(records):
         if str(row[0]).strip() == str(booking.id):
-
             sheet.update_cell(i + 1, 12, "TRUE")
             break
