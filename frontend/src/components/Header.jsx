@@ -43,6 +43,14 @@ export const Header = () => {
 
             {/* Navigation */}
               <nav className="flex flex-1 items-center justify-evenly gap-1 text-xs font-medium text-gray-600 sm:gap-1.5 md:justify-center md:gap-2.5 lg:gap-6 lg:text-sm">
+                <NavLink
+                to="/"
+                aria-label="Home"
+                className={navItemClass}
+              >
+                <LayoutDashboard size={18} className="lg:hidden" />
+                <span className="hidden lg:inline">Home</span>
+              </NavLink>
               <NavLink
                 to="/dashboard"
                 aria-label="Dashboard"

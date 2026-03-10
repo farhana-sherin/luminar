@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.status import (
     HTTP_201_CREATED, HTTP_200_OK, HTTP_400_BAD_REQUEST, 
     HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
@@ -36,7 +36,7 @@ from .utils import (
 # -------------------------
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_booking(request):
  
     serializer = BookingCreateSerializer(data=request.data)
@@ -106,7 +106,7 @@ def create_booking(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def booking_history(request):
   
     bookings = Booking.objects.select_related("dress", "dress__category").order_by("-created_at")
@@ -127,7 +127,7 @@ def booking_history(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def view_single_booking(request, booking_id):
  
     try:
@@ -151,7 +151,7 @@ def view_single_booking(request, booking_id):
 # -------------------------
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def return_dress(request):
    
     booking_id = request.data.get("booking_id")
@@ -191,7 +191,7 @@ def return_dress(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def returned_dresses(request):
  
     bookings = Booking.objects.filter(returned=True).select_related("dress", "dress__category").order_by("-created_at")
@@ -212,7 +212,7 @@ def returned_dresses(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def return_reminder(request):
   
     today = date.today()
@@ -238,7 +238,7 @@ def return_reminder(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def available_dresses(request):
     
     today = date.today()
@@ -268,7 +268,7 @@ def available_dresses(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def booked_dresses(request):
  
     bookings = Booking.objects.filter(returned=False).select_related("dress", "dress__category").order_by("-created_at")
@@ -289,7 +289,7 @@ def booked_dresses(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def filter_dresses(request):
 
     serializer = SearchFilterSerializer(data=request.GET)
@@ -343,7 +343,7 @@ def filter_dresses(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def search_dress(request):
   
     query = request.GET.get("q", "").strip()
@@ -375,7 +375,7 @@ def search_dress(request):
 # -------------------------
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def check_dress_availability(request, dress_id):
    
     start_date_str = request.GET.get("start_date")
@@ -413,7 +413,7 @@ from django.db.models import Count, Q
 from datetime import date
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def dashboard(request):
 
     today = date.today()
@@ -457,7 +457,7 @@ def dashboard(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def booking_statistics(request):
 
     # Monthly booking stats
