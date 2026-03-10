@@ -44,10 +44,12 @@ def setup_sheet_design():
         "horizontalAlignment": "CENTER",
         "verticalAlignment": "MIDDLE",
         "textFormat": {
-            "foregroundColor": {"red": 1, "green": 1, "blue": 1},
-            "bold": True,
-            "fontSize": 11
-        }
+    "foregroundColorStyle": {
+        "rgbColor": {"red": 1, "green": 1, "blue": 1}
+    },
+    "bold": True,
+    "fontSize": 11
+}
     })
 
     sheet.freeze(rows=1)
