@@ -3,10 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Dress
 from .serializers import DressSerializer
-
+from rest_framework.permissions import AllowAny
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_dress(request):
 
     serializer = DressSerializer(data=request.data)
@@ -26,7 +26,7 @@ def create_dress(request):
     })
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def list_dresses(request):
 
     dresses = Dress.objects.all().order_by("-created_at")
@@ -39,7 +39,7 @@ def list_dresses(request):
     })
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def dress_detail(request, pk):
 
     try:
@@ -59,7 +59,7 @@ def dress_detail(request, pk):
 
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def update_dress(request, pk):
 
     try:
@@ -87,7 +87,7 @@ def update_dress(request, pk):
     })
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def delete_dress(request, pk):
 
     try:
