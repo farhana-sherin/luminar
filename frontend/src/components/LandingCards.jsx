@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import dressesApiCall from "../api/dresses.api";
 
-export default function Card({ externalCategory, showFilters = true }) {
+export default function LandingCards() {
   const navigate = useNavigate();
   const [dresses, setDresses] = useState([]);
   const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-
-  useEffect(() => {
-    if (externalCategory) {
-      setSelectedCategory(externalCategory);
-    }
-  }, [externalCategory]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,57 +28,24 @@ export default function Card({ externalCategory, showFilters = true }) {
   }, []);
 
   return (
-    <section className={`${showFilters ? "min-h-screen pt-24" : "py-10"} bg-[#Fdfbfb] px-4 md:px-12 font-sans`}>
+    <section className="py-10 bg-[#Fdfbfb] px-4 md:px-12 font-sans">
       <div className="max-w-[1600px] mx-auto">
 
-        {showFilters && (
-          /* Editorial Header */
-          <div className="flex flex-col items-center text-center mb-20 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-rose-50 to-pink-50 rounded-full blur-[100px] -z-10 opacity-70"></div>
-
-            <span className="text-pink-500 font-semibold uppercase text-[10px] tracking-[0.5em] mb-4">
-              Curated Selection
-            </span>
-            <h2 className="text-5xl md:text-7xl font-serif text-slate-900 tracking-tight leading-[1.1] max-w-3xl">
-              Experience <span className="italic font-light text-slate-500">Pure</span> Luxury
-            </h2>
-            <p className="mt-6 text-slate-500 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
-              Discover high-fashion pieces for your most momentous occasions. Premium quality, curated for elegance.
-            </p>
-
-            {/* Refined Navigation Filters */}
-            <div className="flex flex-wrap justify-center gap-3 mt-12 bg-white/40 backdrop-blur-md p-2 rounded-full border border-white/60 shadow-sm">
-              <button
-                onClick={() => setSelectedCategory("All")}
-                className={`px-8 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${selectedCategory === "All"
-                  ? "bg-slate-900 text-white shadow-xl shadow-slate-200"
-                  : "text-slate-500 hover:text-slate-900 hover:bg-white/80"
-                  }`}
-              >
-                Show All
-              </button>
-              {category.map((cat, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-8 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${selectedCategory === cat
-                    ? "bg-slate-900 text-white shadow-xl shadow-slate-200"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-white/80"
-                    }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-      
+        {/* Small Side Headers */}
+        <div className="flex justify-between items-center mb-8 px-4">
+          <h3 className="text-2xl font-serif text-slate-900 tracking-tight">
+            Trending Now
+          </h3>
+          <h3 className="text-2xl font-serif text-slate-900 tracking-tight">
+            New Arrivals
+          </h3>
+        </div>
 
         {/* Modern Premium Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
           {dresses
             .filter((dress) => selectedCategory === "All" || dress.category_name === selectedCategory)
+            .slice(0, 4)
             .map((dress) => (
               <div
                 key={dress.id}
@@ -146,6 +107,16 @@ export default function Card({ externalCategory, showFilters = true }) {
                 </div>
               </div>
             ))}
+        </div>
+
+        {/* View All Button */}
+        <div className="text-center mt-12">
+          <Link
+            to="/collections"
+            className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-7 py-3 text-xs font-bold uppercase tracking-[0.25em] text-white shadow-md hover:bg-slate-800 transition"
+          >
+            View All
+          </Link>
         </div>
 
       </div>

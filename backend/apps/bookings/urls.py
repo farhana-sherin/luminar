@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (
-    create_booking ,booking_history, view_single_booking, return_dress, returned_dresses, return_reminder,
-    available_dresses, booked_dresses, filter_dresses, search_dress, check_dress_availability, dashboard, booking_statistics,
+    create_booking, booking_history, view_single_booking, return_dress, returned_dresses, return_reminder,
+    available_dresses, booked_dresses, filter_dresses, search_dress, check_dress_availability, dashboard, 
+    booking_statistics, cancel_booking, update_booking
 )
 
 
@@ -19,6 +20,8 @@ urlpatterns = [
     path("search-dress/",search_dress,name="search-dress"),
     path("check-availability/<int:dress_id>/",check_dress_availability,name="check-availability"),
     path("statistics/", booking_statistics, name="booking-statistics"),
+    path("cancel/<int:booking_id>/", cancel_booking, name="cancel-booking"),
+    path("update/<int:booking_id>/", update_booking, name="update-booking"),
 
 
    
