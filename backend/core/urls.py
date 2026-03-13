@@ -5,7 +5,12 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.urls import path, include
 
+from apps.users.views import test_api
+
+
+
 urlpatterns = [
+     path("", test_api),  # root JSON test
     path('admin/', admin.site.urls),
 
     path("api/user/", include("apps.users.urls")),

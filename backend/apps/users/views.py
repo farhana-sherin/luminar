@@ -10,6 +10,18 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import LoginSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+from django.http import JsonResponse
+
+
+
+
+
+def test_api(request):
+    data = {
+        "message": "Backend is running",
+        "status": "success"
+    }
+    return JsonResponse(data)
 
 
 @api_view(['POST'])
