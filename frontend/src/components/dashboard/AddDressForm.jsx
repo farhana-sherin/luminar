@@ -43,10 +43,10 @@ export default function AddDressForm({ onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-6 rounded-xl w-[400px] space-y-4"
+        className="bg-white p-6 rounded-xl w-[400px] space-y-4 shadow-xl"
       >
         <h2 className="text-lg font-semibold">Add Dress</h2>
 
