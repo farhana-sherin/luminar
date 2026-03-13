@@ -1,162 +1,186 @@
 import React, { useEffect, useState } from "react";
-import { ShoppingBag, ClipboardList, CheckCircle } from "lucide-react";
-import { getRecentOrders } from "../api/orders.api";
+import { ShoppingBag, ClipboardList, CheckCircle, AlertTriangle, Clock as ClockIcon, ArrowRight } from "lucide-react";
+import { getRecentOrders, getOrdersSummary } from "../api/orders.api";
+import { getReturnReminders } from "../api/booking.api";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const [recentOrders, setRecentOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [returnReminders, setReturnReminders] = useState([]);
+  const [loadingReminders, setLoadingReminders] = useState(true);
+  const [summary, setSummary] = useState({
+    totalBookings: 0,
+    activeOrders: 0,
+    completedOrders: 0,
+  });
+  const [loadingSummary, setLoadingSummary] = useState(true);
 
   useEffect(() => {
-    const fetchRecent = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getRecentOrders(5);
-        setRecentOrders(data || []);
-      } catch {
+        const [summaryData, recent, reminders] = await Promise.all([
+          getOrdersSummary(),
+          getRecentOrders(5),
+          getReturnReminders(1),
+        ]);
+        setSummary(summaryData);
+        setRecentOrders(recent || []);
+        setReturnReminders(reminders.results || []);
+      } catch (err) {
+        console.error("Dashboard error:", err);
         setRecentOrders([]);
+        setReturnReminders([]);
       } finally {
         setLoadingOrders(false);
+        setLoadingSummary(false);
+        setLoadingReminders(false);
       }
     };
 
-    fetchRecent();
+    fetchData();
   }, []);
 
   return (
-    <div className="p-8 bg-slate-50 min-h-screen">
+    <div className="p-8 bg-[#f8fafc] min-h-screen">
 
       {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-slate-800">Dashboard</h1>
-        <p className="text-gray-500 mt-1">
-          Overview of your store performance
+      <div className="bg-white border border-slate-100 rounded-[2rem] shadow-sm p-8 mb-8">
+        <p className="text-[10px] uppercase tracking-[0.35em] font-bold text-slate-400 mb-3">
+          Overview
+        </p>
+        <h1 className="text-4xl font-serif text-slate-900">
+          Store <span className="italic text-pink-400">Dashboard</span>
+        </h1>
+        <p className="text-sm text-slate-500 mt-3">
+          Monitor your orders, bookings and business activity.
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
-
-        {/* Total Orders */}
-        <div className="bg-linear-to-r from-pink-100 to-pink-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
+      {/* Stats */}
+      <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition">
           <div>
-            <h2 className="text-sm text-gray-500">Total Orders</h2>
-            <p className="text-3xl font-bold mt-2 text-gray-800">120</p>
+            <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">Total Bookings</p>
+            <h2 className="text-3xl font-serif text-pink-500 mt-2">{loadingSummary ? "--" : summary.totalBookings}</h2>
           </div>
-          <div className="bg-pink-200 p-3 rounded-xl">
-            <ShoppingBag className="text-pink-600" size={22} />
-          </div>
+          <div className="bg-pink-100 p-4 rounded-xl"><ShoppingBag className="text-pink-500" size={22} /></div>
         </div>
 
-        {/* Total Bookings */}
-        <div className="bg-linear-to-r from-purple-100 to-purple-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
+        <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition">
           <div>
-            <h2 className="text-sm text-gray-500">Total Bookings</h2>
-            <p className="text-3xl font-bold mt-2 text-gray-800">85</p>
+            <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">Active Orders</p>
+            <h2 className="text-3xl font-serif text-pink-400 mt-2">{loadingSummary ? "--" : summary.activeOrders}</h2>
           </div>
-          <div className="bg-purple-200 p-3 rounded-xl">
-            <ClipboardList className="text-purple-600" size={22} />
-          </div>
+          <div className="bg-pink-50 p-4 rounded-xl"><ClipboardList className="text-pink-400" size={22} /></div>
         </div>
 
-        {/* Completed Orders */}
-        <div className="bg-linear-to-r from-green-100 to-green-50 p-6 rounded-2xl shadow-sm flex items-center justify-between">
+        <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition">
           <div>
-            <h2 className="text-sm text-gray-500">Completed Orders</h2>
-            <p className="text-3xl font-bold mt-2 text-gray-800">60</p>
+            <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">Completed / Returned</p>
+            <h2 className="text-3xl font-serif text-pink-300 mt-2">{loadingSummary ? "--" : summary.completedOrders}</h2>
           </div>
-          <div className="bg-green-200 p-3 rounded-xl">
-            <CheckCircle className="text-green-600" size={22} />
-          </div>
+          <div className="bg-pink-50 p-4 rounded-xl"><CheckCircle className="text-pink-300" size={22} /></div>
         </div>
-
       </div>
 
-      {/* Recent Orders */}
-      <div className="bg-white rounded-2xl shadow-sm p-6">
+      {/* Return Reminders Section */}
+      {!loadingReminders && returnReminders.length > 0 && (
+        <section id="return-reminders" className="mb-8 bg-rose-50 border border-rose-100 rounded-[2rem] p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <AlertTriangle className="text-rose-500" size={20} />
+            <h2 className="text-lg font-bold text-rose-900 uppercase tracking-wider">Return Reminders</h2>
+            <span className="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full ml-auto">
+              {returnReminders.length} Action Required
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {returnReminders.map((reminder) => (
+              <div key={reminder.id} className="bg-white/80 backdrop-blur-sm border border-rose-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition group overflow-hidden relative">
+                <div className="absolute right-0 top-0 bottom-0 w-1 bg-rose-500 opacity-20 group-hover:opacity-100 transition-opacity"></div>
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">{reminder.dress_name}</h4>
+                    <p className="text-[10px] text-slate-400 font-mono">{reminder.dress_code}</p>
+                  </div>
+                  <ClockIcon size={14} className="text-rose-400" />
+                </div>
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center gap-2 text-xs text-slate-600">
+                    <span className="font-semibold">{reminder.customer_name}</span>
+                  </div>
+                  <p className="text-[10px] text-rose-600 font-bold uppercase tracking-wide">
+                    Return Period: {reminder.end_date}
+                  </p>
+                </div>
+                <Link
+                  to={`/dashboard/order/${reminder.id}`}
+                  className="flex items-center justify-center gap-2 w-full py-2 rounded-xl bg-rose-600 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-rose-700 transition shadow-lg shadow-rose-200"
+                >
+                  View Details
+                  <ArrowRight size={12} />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
+      {/* Recent Orders */}
+      <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-semibold text-slate-800">
-            Recent Orders
-          </h2>
+          <h2 className="text-lg font-semibold text-slate-900">Recent Orders</h2>
+          <Link to="/dashboard/orders" className="text-xs font-bold text-pink-500 hover:text-pink-600 tracking-wider uppercase">View All</Link>
         </div>
 
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="text-gray-500 border-b text-sm">
-              <th className="py-3">Order ID</th>
-              <th>Dress</th>
-              <th>Customer</th>
-              <th>Total</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {loadingOrders ? (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="py-4 text-center text-xs text-gray-500"
-                >
-                  Loading recent orders...
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="text-xs uppercase text-slate-400 border-b tracking-widest">
+                <th className="py-4 text-left">Order</th>
+                <th className="text-left">Dress</th>
+                <th className="text-left">Customer</th>
+                <th className="text-left">Total</th>
+                <th className="text-left">Status</th>
               </tr>
-            ) : recentOrders.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="py-4 text-center text-xs text-gray-500"
-                >
-                  No recent orders found.
-                </td>
-              </tr>
-            ) : (
-              recentOrders.map((order) => {
-                const statusLabel = order.returned ? "Returned" : "Active";
-                const statusClass = order.returned
-                  ? "bg-green-100 text-green-600"
-                  : "bg-blue-100 text-blue-600";
+            </thead>
+            <tbody>
+              {loadingOrders ? (
+                <tr><td colSpan={5} className="py-10 text-center text-slate-400 text-sm">Loading recent orders...</td></tr>
+              ) : recentOrders.length === 0 ? (
+                <tr><td colSpan={5} className="py-10 text-center text-slate-400 text-sm">No recent orders found.</td></tr>
+              ) : (
+                recentOrders.map((order) => {
+                  const statusColors = {
+                    Confirmed: "bg-emerald-50 text-emerald-600 border border-emerald-100",
+                    Cancelled: "bg-rose-50 text-rose-500 border border-rose-100",
+                    Returned: "bg-slate-50 text-slate-500 border border-slate-100",
+                  };
 
-                return (
-                  <tr
-                    key={order.id}
-                    className="border-b last:border-none hover:bg-gray-50 transition"
-                  >
-                    <td className="py-4 font-medium text-gray-700">
-                      #{order.id}
-                    </td>
-                    <td>
-                      <div className="space-y-0.5">
-                        <p className="text-sm font-semibold text-slate-800">
-                          {order.dress_name}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {order.dress_code} • {order.category}
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="space-y-0.5">
-                        <p>{order.customer_name}</p>
-                        <p className="text-xs text-slate-500">
-                          {order.mobile_number}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="font-medium">₹ {order.total_amount}</td>
-                    <td>
-                      <span
-                        className={`text-xs px-3 py-1 rounded-full font-medium ${statusClass}`}
-                      >
-                        {statusLabel}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-
+                  return (
+                    <tr key={order.id} className="border-b last:border-none hover:bg-pink-50 transition">
+                      <td className="py-4 font-semibold text-slate-700">ORD-{String(order.id).padStart(4, "0")}</td>
+                      <td>
+                        <p className="text-sm font-semibold text-slate-800">{order.dress_name}</p>
+                        <p className="text-xs text-slate-500">{order.dress_code} • {order.category}</p>
+                      </td>
+                      <td>
+                        <p className="text-sm text-slate-700">{order.customer_name}</p>
+                        <p className="text-xs text-slate-500">{order.mobile_number}</p>
+                      </td>
+                      <td className="font-semibold text-slate-800">₹{order.total_amount?.toLocaleString()}</td>
+                      <td>
+                        <span className={`px-3 py-1 text-[10px] rounded-full font-bold uppercase tracking-wider ${statusColors[order.status]}`}>
+                          {order.status}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

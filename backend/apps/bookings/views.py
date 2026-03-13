@@ -169,12 +169,15 @@ def return_dress(request):
     if not permission.has_object_permission(request, None, booking):
         return error_response("Permission denied", 403)
     
-    if booking.returned:
+    if booking.status == "Returned":
         return error_response("Dress already returned", HTTP_400_BAD_REQUEST)
+    
+    if booking.status == "Cancelled":
+        return error_response("Cannot return a cancelled booking", HTTP_400_BAD_REQUEST)
     
     try:
         with transaction.atomic():
-            booking.returned = True
+            booking.status = "Returned"
             booking.save()
             safe_call_google_sheets(update_return_status, booking)
     except Exception as e:
@@ -184,6 +187,38 @@ def return_dress(request):
         )
     
     return Response({"message": "Dress returned successfully"})
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def cancel_booking(request, booking_id):
+    try:
+        booking = Booking.objects.get(id=booking_id)
+    except Booking.DoesNotExist:
+        return error_response("Booking not found", HTTP_404_NOT_FOUND)
+    
+    if booking.status != "Confirmed":
+        return error_response(f"Cannot cancel booking with status {booking.status}", HTTP_400_BAD_REQUEST)
+    
+    booking.status = "Cancelled"
+    booking.save()
+    return Response({"message": "Booking cancelled successfully"})
+
+@api_view(["PATCH"])
+@permission_classes([AllowAny])
+def update_booking(request, booking_id):
+    try:
+        booking = Booking.objects.get(id=booking_id)
+    except Booking.DoesNotExist:
+        return error_response("Booking not found", HTTP_404_NOT_FOUND)
+    
+    if booking.status == "Cancelled":
+        return error_response("Cannot update a cancelled booking", HTTP_400_BAD_REQUEST)
+    
+    serializer = BookingSerializer(booking, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return error_response(serializer.errors, HTTP_400_BAD_REQUEST)
 
 
 # -------------------------
@@ -218,8 +253,8 @@ def return_reminder(request):
     today = date.today()
     
     bookings = Booking.objects.filter(
-        end_date__lt=today,
-        returned=False
+        end_date__lte=today,
+        status="Confirmed"
     ).select_related("dress", "dress__category").order_by("end_date")
     
     page_obj, paginator = paginate_queryset(bookings, request, page_size=20)
@@ -243,10 +278,10 @@ def available_dresses(request):
     
     today = date.today()
     
-    # Get dress IDs that are currently booked
+    # Get dress IDs that are currently booked (Confirmed and not yet returned/cancelled)
     booked_dress_ids = Booking.objects.filter(
         end_date__gte=today,
-        returned=False
+        status="Confirmed"
     ).values_list("dress_id", flat=True).distinct()
     
     # Get available dresses
@@ -271,7 +306,7 @@ def available_dresses(request):
 @permission_classes([AllowAny])
 def booked_dresses(request):
  
-    bookings = Booking.objects.filter(returned=False).select_related("dress", "dress__category").order_by("-created_at")
+    bookings = Booking.objects.filter(status="Confirmed").select_related("dress", "dress__category").order_by("-created_at")
     
     page_obj, paginator = paginate_queryset(bookings, request, page_size=20)
     serializer = BookingListSerializer(page_obj, many=True)
@@ -424,18 +459,22 @@ def dashboard(request):
 
         active_rentals=Count(
             "id",
-            filter=Q(returned=False)
+            filter=Q(status="Confirmed")
         ),
 
         returned_dresses=Count(
             "id",
-            filter=Q(returned=True)
+            filter=Q(status="Returned")
         ),
-        #dresses that should have been returned by today but are not yet returned
+        
+        cancelled_bookings=Count(
+            "id",
+            filter=Q(status="Cancelled")
+        ),
 
         today_returns=Count(
             "id",
-            filter=Q(end_date=today, returned=False)
+            filter=Q(end_date=today, status="Confirmed")
         )
     )
 

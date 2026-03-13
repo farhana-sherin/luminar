@@ -1,58 +1,116 @@
-import React from "react";
+return (
+  <div className="min-h-screen bg-[#fafafa] flex font-sans">
 
-export const Dresses = () => {
-  return (
-    <div className="space-y-6">
-      <section className="rounded-3xl border border-white/65 bg-white/75 p-5 shadow-xl backdrop-blur-xl sm:p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-          Dashboard
-        </p>
-        <h1 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">Dresses</h1>
-        <p className="mt-1 text-sm text-slate-600">Add / manage dresses.</p>
-      </section>
+    {/* Sidebar */}
+    <aside className="w-64 bg-white border-r border-slate-100 p-6 flex flex-col justify-between">
 
-      <section className="rounded-3xl border border-slate-200/80 bg-white/90 p-5 shadow-lg sm:p-6">
-        <h2 className="text-lg font-bold text-slate-900">Dress details</h2>
-        <form className="mt-5 grid gap-4 sm:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
-          <label className="block space-y-1">
-            <span className="text-sm font-semibold text-slate-700">Dress name</span>
-            <input
-              type="text"
-              placeholder="Velvet Lehenga"
-              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none ring-pink-200 transition focus:ring-2"
-            />
-          </label>
+      <div>
+        <h1 className="text-xl font-bold mb-10">Aura Atelier</h1>
 
-          <label className="block space-y-1">
-            <span className="text-sm font-semibold text-slate-700">Category</span>
-            <input
-              type="text"
-              placeholder="Wedding"
-              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none ring-pink-200 transition focus:ring-2"
-            />
-          </label>
+        <nav className="space-y-3 text-sm">
 
-          <label className="block space-y-1 sm:col-span-2">
-            <span className="text-sm font-semibold text-slate-700">Address</span>
-            <input
-              type="text"
-              placeholder="Enter address"
-              required
-              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none ring-pink-200 transition focus:ring-2"
-            />
-          </label>
+          <button className="w-full text-left px-4 py-2 rounded-lg bg-pink-50 text-pink-600 font-medium">
+            Inventory
+          </button>
 
-          <div className="sm:col-span-2">
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
-            >
-              Save
+          <button className="w-full text-left px-4 py-2 rounded-lg hover:bg-slate-50">
+            Orders
+          </button>
+
+          <button className="w-full text-left px-4 py-2 rounded-lg hover:bg-slate-50">
+            Customers
+          </button>
+
+        </nav>
+      </div>
+
+      <p className="text-xs text-slate-400">Aura Atelier System</p>
+
+    </aside>
+
+
+    {/* Main Content */}
+    <div className="flex-1 p-10">
+
+      {/* Header */}
+      <div className="flex justify-between items-center mb-10">
+
+        <h2 className="text-3xl font-semibold">Inventory</h2>
+
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search dresses..."
+          className="px-4 py-2 border border-slate-200 rounded-lg"
+        />
+
+      </div>
+
+
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-6 mb-12">
+
+        <div className="bg-white p-6 rounded-xl border border-slate-100">
+          <p className="text-3xl font-bold">{inventory.length}</p>
+          <p className="text-sm text-slate-400">Total Dresses</p>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl border border-slate-100">
+          <p className="text-3xl font-bold">
+            {inventory.filter((d) => d.status === "Available").length}
+          </p>
+          <p className="text-sm text-slate-400">Available</p>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl border border-slate-100">
+          <p className="text-3xl font-bold">
+            ₹{inventory.reduce((a, c) => a + (Number(c.pricePerDay) || 0), 0)}
+          </p>
+          <p className="text-sm text-slate-400">Daily Value</p>
+        </div>
+
+      </div>
+
+
+      {/* Inventory Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+        {filteredInventory.map((d) => (
+          <div
+            key={d.id}
+            className="bg-white border border-slate-100 rounded-xl p-6 hover:shadow-md transition"
+          >
+
+            <div className="h-40 bg-pink-50 rounded-lg mb-4 flex items-center justify-center text-4xl text-pink-300">
+              {d.name.charAt(0)}
+            </div>
+
+            <h3 className="font-semibold text-lg">{d.name}</h3>
+
+            <p className="text-sm text-slate-400">
+              {d.category} • Size {d.size || "OS"}
+            </p>
+
+            <p className="text-xl font-bold mt-3">
+              ₹{d.pricePerDay}
+            </p>
+
+            <button className="mt-3 text-sm text-pink-500 hover:underline">
+              Edit
             </button>
-          </div>
-        </form>
-      </section>
-    </div>
-  );
-};
 
+          </div>
+        ))}
+
+      </div>
+
+
+      {/* Floating Add Button */}
+      <button className="fixed bottom-10 right-10 bg-pink-500 text-white w-14 h-14 rounded-full text-2xl shadow-lg hover:scale-105 transition">
+        +
+      </button>
+
+    </div>
+
+  </div>
+);

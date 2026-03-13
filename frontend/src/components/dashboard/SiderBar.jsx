@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, LayoutDashboard, Shirt, ShoppingCart, X } from "lucide-react";
+import { Home, LayoutDashboard, Shirt, ShoppingCart, CalendarClock, Sparkles, X } from "lucide-react";
 
 export default function Sidebar({ open, setOpen }) {
   const location = useLocation();
@@ -8,12 +8,13 @@ export default function Sidebar({ open, setOpen }) {
     { name: "Home", path: "/", icon: <Home size={18}/> },
     { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18}/> },
     { name: "Dresses", path: "/dashboard/dresses", icon: <Shirt size={18}/> },
+    { name: "Booked Dresses", path: "/dashboard/booked-dresses", icon: <CalendarClock size={18}/> },
+    { name: "Available Dresses", path: "/dashboard/available-dresses", icon: <Sparkles size={18}/> },
     { name: "Orders", path: "/dashboard/orders", icon: <ShoppingCart size={18}/> },
   ];
 
   return (
     <>
-
       {/* Overlay (mobile) */}
       {open && (
         <div
@@ -23,9 +24,11 @@ export default function Sidebar({ open, setOpen }) {
       )}
 
       <div
-        className={`fixed md:static z-50 top-0 left-0 h-screen w-64 
-        bg-gradient-to-b from-pink-50 via-purple-50 to-blue-50 
-        border-r border-gray-100 p-6 flex flex-col
+        className={`fixed md:static z-50 top-0 left-0 min-h-screen w-64
+        bg-gradient-to-b from-pink-50 via-purple-50 to-blue-50
+        border-r border-gray-100
+        rounded-r-[40px] shadow-xl
+        p-6 flex flex-col
         transform transition-transform duration-300
         ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
