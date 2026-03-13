@@ -44,7 +44,7 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'dress', 'customer_name', 'mobile_number', 'place',
             'start_date', 'end_date', 'total_days', 'total_amount',
-            'returned', 'created_at'
+            'status', 'created_at'
         ]
         read_only_fields = ['id', 'total_days', 'total_amount', 'created_at']
 
@@ -60,7 +60,7 @@ class BookingListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'dress_name', 'dress_code', 'category', 'customer_name',
             'mobile_number', 'start_date', 'end_date', 'total_days',
-            'total_amount', 'returned', 'created_at'
+            'total_amount', 'status', 'created_at'
         ]
 
 
@@ -100,7 +100,7 @@ class DressListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Dress
-        fields = ['id', 'name', 'code', 'color', 'category', 'price']
+        fields = ['id', 'name', 'code', 'color', 'category', 'price', 'image']
 
 
 class SearchFilterSerializer(serializers.Serializer):
