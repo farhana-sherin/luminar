@@ -1,16 +1,20 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import os
+import json
 
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CREDS_PATH = os.path.join(BASE_DIR, "credentials.json")
+# Load credentials from Render environment variable
+google_creds = os.getenv("GOOGLE_CREDENTIALS")
 
-creds = Credentials.from_service_account_file(CREDS_PATH, scopes=SCOPES)
+creds = Credentials.from_service_account_info(
+    json.loads(google_creds),
+    scopes=SCOPES
+)
 
 client = gspread.authorize(creds)
 
