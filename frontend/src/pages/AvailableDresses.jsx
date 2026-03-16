@@ -188,7 +188,7 @@ export default function AvailableDresses() {
                   <div className="relative aspect-[3/4] overflow-hidden">
 
                     <img
-                      src={`http://127.0.0.1:8000${dress.image}`}
+                      src={dress.image}
                       alt={dress.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />

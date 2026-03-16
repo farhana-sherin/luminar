@@ -267,7 +267,7 @@ export default function BookedDresses() {
                   {selectedDetail.dress?.image && (
                     <div className="w-24 h-32 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0">
                       <img
-                        src={`http://127.0.0.1:8000${selectedDetail.dress.image}`}
+                        src={selectedDetail.dress.image}
                         alt={selectedDetail.dress.name}
                         className="w-full h-full object-cover"
                       />

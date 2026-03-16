@@ -141,7 +141,7 @@ export default function DressDetail() {
       <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-rose-200 to-pink-200 blur-lg opacity-40 group-hover:opacity-70 transition"></div>
 
       <img
-        src={`http://127.0.0.1:8000${dress.image}`}
+        src={dress.image}
         alt={dress.name}
         className="relative w-20 h-20 object-cover rounded-xl shadow-md border border-white transform transition duration-500 group-hover:scale-110"
       />

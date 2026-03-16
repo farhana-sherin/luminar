@@ -56,7 +56,7 @@ export default function LandingCards() {
                 {/* Image */}
                 <div className="relative aspect-[4/5] rounded-[1.7rem] overflow-hidden bg-slate-50 mb-4">
                   <img
-                    src={`http://127.0.0.1:8000${dress.image}`}
+                    src={dress.image}
                     alt={dress.name}
                     className="w-full h-full object-cover transition-transform duration-[1.6s] ease-[0.16,1,0.3,1] group-hover:scale-110"
                   />
