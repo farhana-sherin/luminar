@@ -34,16 +34,15 @@ from .utils import (
 # -------------------------
 # CREATE BOOKING
 # -------------------------
-
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def create_booking(request):
- 
+
     serializer = BookingCreateSerializer(data=request.data)
-    
+
     if not serializer.is_valid():
         return error_response(serializer.errors, HTTP_400_BAD_REQUEST)
-    
+
     # Validate dates
     try:
         start_date, end_date = validate_and_parse_dates(
@@ -52,46 +51,45 @@ def create_booking(request):
         )
     except ValueError as e:
         return error_response(str(e), HTTP_400_BAD_REQUEST)
-    
+
     # Check if dress exists
     try:
         dress = Dress.objects.get(id=serializer.validated_data['dress_id'])
     except Dress.DoesNotExist:
         return error_response("Dress not found", HTTP_404_NOT_FOUND)
-    
+
     # Check availability
     if not is_dress_available(dress, start_date, end_date):
         return error_response(
             "Dress already booked for selected dates",
             HTTP_400_BAD_REQUEST
         )
-    
-    # Calculate total days and amount
+
+    # Calculate booking details
     total_days = (end_date - start_date).days + 1
-    total_amount = dress.price  # Fixed price for the dress rental
-    
-    try:
-        with transaction.atomic():
-            booking = Booking.objects.create(
-                dress=dress,
-                customer_name=serializer.validated_data['customer_name'],
-                mobile_number=serializer.validated_data['mobile_number'],
-                place=serializer.validated_data['place'],
-                start_date=start_date,
-                end_date=end_date,
-                total_days=total_days,
-                total_amount=total_amount
-            )
-            
-            # Try to sync with Google Sheets
-            safe_call_google_sheets(add_booking, booking)
-    except Exception as e:
-        return error_response(
-            f"Error creating booking: {str(e)}",
-            HTTP_500_INTERNAL_SERVER_ERROR
+    total_amount = dress.price
+
+    # Create booking
+    with transaction.atomic():
+        booking = Booking.objects.create(
+            dress=dress,
+            customer_name=serializer.validated_data['customer_name'],
+            mobile_number=serializer.validated_data['mobile_number'],
+            place=serializer.validated_data['place'],
+            start_date=start_date,
+            end_date=end_date,
+            total_days=total_days,
+            total_amount=total_amount
         )
-    
+
+    # Sync booking to Google Sheets
+    try:
+        add_booking(booking)
+    except Exception as e:
+        print("Google Sheet Sync Failed:", e)
+
     booking_serializer = BookingSerializer(booking)
+
     return Response(
         {
             "message": "Booking created successfully",
@@ -99,7 +97,6 @@ def create_booking(request):
         },
         status=HTTP_201_CREATED
     )
-
 
 # -------------------------
 # BOOKING HISTORY

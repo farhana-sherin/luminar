@@ -55,6 +55,8 @@ export default function DressDetail() {
         ...data,
       };
 
+      console.log('Booking payload', payload);
+
       const res = await createBooking(payload);
 
       toast.success("Dress booking confirmed");
@@ -69,12 +71,26 @@ export default function DressDetail() {
         navigate("/dashboard/orders");
       }, 2000);
     } catch (err) {
-      const serverError =
-        err?.response?.data?.error ||
-        err?.response?.data?.message ||
-        err?.response?.data?.non_field_errors?.[0] ||
-        err?.response?.data?.end_date?.[0] ||
-        "Booking failed. Please check your details and try again.";
+      const responseData = err?.response?.data;
+      let serverError = "Booking failed. Please check your details and try again.";
+
+      console.error("Booking error response:", err?.response?.data);
+
+      if (responseData) {
+        if (responseData.error) {
+          if (typeof responseData.error === "string") {
+            serverError = responseData.error;
+          } else if (typeof responseData.error === "object") {
+            serverError = Object.values(responseData.error)
+              .flat()
+              .join(" ");
+          }
+        } else if (responseData.message) {
+          serverError = responseData.message;
+        } else if (responseData.non_field_errors) {
+          serverError = responseData.non_field_errors[0];
+        }
+      }
 
       setError(serverError);
       toast.error(serverError);
@@ -219,7 +235,10 @@ export default function DressDetail() {
               </label>
 
               <input
-                {...register("customer_name", { required: "Required" })}
+                {...register("customer_name", {
+                  required: "Required",
+                  minLength: { value: 2, message: "Name must be at least 2 characters" },
+                })}
                 className="w-full border rounded-md px-3 py-2"
               />
 
@@ -236,7 +255,14 @@ export default function DressDetail() {
               </label>
 
               <input
-                {...register("mobile_number", { required: "Required" })}
+                {...register("mobile_number", {
+                  required: "Required",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Mobile number must contain only digits",
+                  },
+                  minLength: { value: 10, message: "Mobile number must be at least 10 digits" },
+                })}
                 className="w-full border rounded-md px-3 py-2"
               />
             </div>
@@ -247,7 +273,10 @@ export default function DressDetail() {
               </label>
 
               <input
-                {...register("place", { required: "Required" })}
+                {...register("place", {
+                  required: "Required",
+                  minLength: { value: 2, message: "Place must be at least 2 characters" },
+                })}
                 className="w-full border rounded-md px-3 py-2"
               />
             </div>
