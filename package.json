@@ -1,0 +1,14 @@
+{
+  "name": "luminar",
+  "version": "1.0.0",
+  "description": "Luminar Dress Rental App",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "postbuild": "cp -r frontend/dist/* backend/static/ && cd backend && pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate",
+    "start": "cd backend && python manage.py runserver"
+  },
+  "engines": {
+    "node": "18.x",
+    "python": "3.11.x"
+  }
+}
