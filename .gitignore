@@ -65,3 +65,7 @@ htmlcov/
 node_modules/
 dist/
 build/
+
+
+credentials.json
+backend/credentials.json
