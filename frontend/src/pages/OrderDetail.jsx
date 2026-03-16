@@ -332,7 +332,7 @@ export default function OrderDetail() {
                         <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6">
                             <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 bg-slate-50">
                                 <img
-                                    src={`http://127.0.0.1:8000${order.dress?.image}`}
+                                    src={order.dress?.image}
                                     alt={order.dress?.name}
                                     className="w-full h-full object-cover"
                                 />

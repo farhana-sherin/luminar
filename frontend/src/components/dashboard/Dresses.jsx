@@ -139,7 +139,7 @@ export default function Dresses() {
 
                 <div className="absolute inset-0 w-full h-full">
                   <img
-                    src={`http://127.0.0.1:8000${dress.imageWithCacheBust}`}
+                    src={dress.imageWithCacheBust}
                     alt={dress.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
