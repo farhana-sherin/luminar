@@ -3,10 +3,10 @@ import axios from "../lib/axios";
 export const getOrders = async (page = 1) => {
   try {
     const { data } = await axios.get(`/bookings/history/?page=${page}`);
-    return data; // { count, total_pages, current_page, results }
+    return (data && typeof data === 'object' && Array.isArray(data.results)) ? data : { count: 0, total_pages: 1, current_page: 1, results: [] };
   } catch (error) {
     console.error("Error fetching orders:", error);
-    throw error;
+    return { count: 0, total_pages: 1, current_page: 1, results: [] };
   }
 };
 
