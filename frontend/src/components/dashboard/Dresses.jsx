@@ -296,35 +296,65 @@ export default function Dresses() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 md:gap-8">
 
           {filteredDresses.map((dress) => (
-
-            <div key={dress.id} className="group relative flex flex-col rounded-3xl overflow-hidden shadow-sm bg-slate-100 aspect-[3/4]">
-
-              <img
-                src={dress.imageWithCacheBust}
-                alt={dress.name}
-                className="w-full h-full object-cover"
-              />
-
-              <div className="absolute top-0 right-0 p-4 flex gap-2">
-
-                <button
-                  onClick={() => setEditDress(dress)}
-                  className="p-2 bg-white rounded-full"
-                >
-                  <Edit3 size={16} />
-                </button>
-
-                <button
-                  onClick={() => handleDelete(dress.id)}
-                  className="p-2 bg-white rounded-full"
-                >
-                  <Trash2 size={16} />
-                </button>
-
+            <div key={dress.id} className="group relative flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100">
+              {/* Image Section */}
+              <div className="relative aspect-[4/5] overflow-hidden bg-slate-50">
+                <img
+                  src={dress.imageWithCacheBust}
+                  alt={dress.name}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                
+                {/* Action Dock (Fixed on top right) */}
+                <div className="absolute top-4 right-4 flex flex-col gap-2 z-20">
+                  <button
+                    onClick={() => setEditDress(dress)}
+                    className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-slate-700 hover:bg-pink-400 hover:text-white transition-all shadow-lg border border-white/50"
+                  >
+                    <Edit3 size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(dress.id)}
+                    className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-lg border border-white/50"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+                
+                {/* Category Floating Badge */}
+                <div className="absolute bottom-4 left-4">
+                  <span className="px-3 py-1 bg-black/40 backdrop-blur-md text-white text-[10px] uppercase font-bold tracking-widest rounded-full border border-white/20">
+                    {dress.category_name}
+                  </span>
+                </div>
               </div>
 
+              {/* Info Section (Metadata) */}
+              <div className="p-6 space-y-4">
+                <div className="flex justify-between items-start gap-4">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-slate-900 group-hover:text-pink-400 transition-colors uppercase tracking-tight text-lg truncate">
+                      {dress.name}
+                    </h3>
+                    <p className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.2em] mt-1">
+                      REF: {dress.code || "---"}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xl font-black text-slate-900">
+                      ₹{Number(dress.price).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2 pt-2 border-t border-slate-50">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-xl">
+                      <span className="w-2.5 h-2.5 rounded-full border border-white shadow-sm" style={{ backgroundColor: dress.color }}></span>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{dress.color}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-
           ))}
 
         </div>
@@ -332,21 +362,24 @@ export default function Dresses() {
       </div>
 
       {showForm && (
-        <AddDressForm
-          onClose={() => setShowForm(false)}
-          onSuccess={fetchDresses}
-        />
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4 animate-in fade-in duration-300">
+          <AddDressForm
+            onClose={() => setShowForm(false)}
+            onSuccess={fetchDresses}
+          />
+        </div>
       )}
 
       {editDress && (
-        <EditDressForm
-          dress={editDress}
-          onClose={() => setEditDress(null)}
-          onSuccess={fetchDresses}
-        />
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4 animate-in fade-in duration-300">
+          <EditDressForm
+            dress={editDress}
+            onClose={() => setEditDress(null)}
+            onSuccess={fetchDresses}
+          />
+        </div>
       )}
 
     </div>
-
   );
 }

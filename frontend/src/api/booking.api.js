@@ -43,20 +43,20 @@ export const getBookingDetail = async (id) => {
 export const getBookedDresses = async (page = 1) => {
   try {
     const { data } = await axios.get(`/bookings/booked-dresses/?page=${page}`);
-    return (data && typeof data === 'object' && Array.isArray(data.results)) ? data : { count: 0, total_pages: 1, current_page: 1, results: [] };
+    return data; // { count, total_pages, current_page, results }
   } catch (error) {
     console.error("Error fetching booked dresses:", error);
-    return { count: 0, total_pages: 1, current_page: 1, results: [] };
+    throw error;
   }
 };
 
 export const getAvailableDresses = async (page = 1) => {
   try {
     const { data } = await axios.get(`/bookings/available-dresses/?page=${page}`);
-    return (data && typeof data === 'object' && Array.isArray(data.results)) ? data : { count: 0, total_pages: 1, current_page: 1, results: [] };
+    return data; // { count, total_pages, current_page, results }
   } catch (error) {
     console.error("Error fetching available dresses:", error);
-    return { count: 0, total_pages: 1, current_page: 1, results: [] };
+    throw error;
   }
 };
 
@@ -94,9 +94,9 @@ export const updateBooking = async (id, bookingData) => {
 export const getReturnReminders = async (page = 1) => {
   try {
     const { data } = await axios.get(`/bookings/return-reminder/?page=${page}`);
-    return (data && typeof data === 'object' && Array.isArray(data.results)) ? data : { count: 0, total_pages: 1, current_page: 1, results: [] };
+    return data;
   } catch (error) {
     console.error("Error fetching return reminders:", error);
-    return { count: 0, total_pages: 1, current_page: 1, results: [] };
+    throw error;
   }
 };

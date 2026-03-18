@@ -17,10 +17,10 @@ export default async function dressesApiCall() {
 export const getDressDetail = async (id) => {
   try {
     const res = await axios.get(`/dresses/${id}/`);
-    return (res.data && res.data.data) ? res.data.data : null;
+    return res.data.data;
   } catch (error) {
     console.error(error);
-    return null;
+    throw error;
   }
 };
 

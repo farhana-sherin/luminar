@@ -5,12 +5,12 @@ export default function Sidebar({ open, setOpen }) {
   const location = useLocation();
 
   const navItems = [
-    { name: "Home", path: "/", icon: <Home size={18}/> },
-    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18}/> },
-    { name: "Dresses", path: "/dashboard/dresses", icon: <Shirt size={18}/> },
-    { name: "Booked Dresses", path: "/dashboard/booked-dresses", icon: <CalendarClock size={18}/> },
-    { name: "Available Dresses", path: "/dashboard/available-dresses", icon: <Sparkles size={18}/> },
-    { name: "Orders", path: "/dashboard/orders", icon: <ShoppingCart size={18}/> },
+    { name: "Home", path: "/", icon: <Home size={18} /> },
+    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
+    { name: "Dresses", path: "/dashboard/dresses", icon: <Shirt size={18} /> },
+    { name: "Booked Dresses", path: "/dashboard/booked-dresses", icon: <CalendarClock size={18} /> },
+    { name: "Available Dresses", path: "/dashboard/available-dresses", icon: <Sparkles size={18} /> },
+    { name: "Orders", path: "/dashboard/orders", icon: <ShoppingCart size={18} /> },
   ];
 
   return (

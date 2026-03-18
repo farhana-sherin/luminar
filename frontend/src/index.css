@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -83,11 +83,21 @@ body {
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+.font-serif-premium {
+  font-family: 'Playfair Display', serif;
+}
 
-.font-serif-premium { font-family: 'Playfair Display', serif; }
-.font-sans-premium { font-family: 'Inter', sans-serif; letter-spacing: -0.01em; }
+.font-sans-premium {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+}
 
 /* Custom Scrollbar for Category Nav */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

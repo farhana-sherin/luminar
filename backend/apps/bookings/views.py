@@ -195,8 +195,17 @@ def cancel_booking(request, booking_id):
     if booking.status != "Confirmed":
         return error_response(f"Cannot cancel booking with status {booking.status}", HTTP_400_BAD_REQUEST)
     
-    booking.status = "Cancelled"
-    booking.save()
+    try:
+        with transaction.atomic():
+            booking.status = "Cancelled"
+            booking.save()
+            safe_call_google_sheets(update_return_status, booking)
+    except Exception as e:
+        return error_response(
+            f"Error cancelling booking: {str(e)}",
+            HTTP_500_INTERNAL_SERVER_ERROR
+        )
+            
     return Response({"message": "Booking cancelled successfully"})
 
 @api_view(["PATCH"])
@@ -213,6 +222,8 @@ def update_booking(request, booking_id):
     serializer = BookingSerializer(booking, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
+        # Sync to Google Sheets if status is changed or just on every update to be safe
+        safe_call_google_sheets(update_return_status, booking)
         return Response(serializer.data)
     return error_response(serializer.errors, HTTP_400_BAD_REQUEST)
 
