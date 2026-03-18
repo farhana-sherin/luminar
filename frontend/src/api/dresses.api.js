@@ -3,10 +3,14 @@ import axios from "../lib/axios";
 export default async function dressesApiCall() {
   try {
     const res = await axios.get(`/dresses/list/?t=${Date.now()}`);
-    return res.data.data;
+    if (res.data && Array.isArray(res.data.data)) {
+      return res.data.data;
+    }
+    console.warn("Unexpected API response format:", res.data);
+    return [];
   } catch (error) {
     console.error(error);
-    throw error;
+    return [];
   }
 }
 

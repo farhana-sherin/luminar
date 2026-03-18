@@ -2,13 +2,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.status import (
-    HTTP_201_CREATED, HTTP_200_OK, HTTP_400_BAD_REQUEST, 
+    HTTP_201_CREATED, HTTP_400_BAD_REQUEST, 
     HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 )
 
-from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from datetime import date
 from django.db import transaction
@@ -21,8 +20,8 @@ from .models import Booking
 from .services import is_dress_available
 from .serializers import (
     BookingCreateSerializer, BookingSerializer, BookingListSerializer,
-    BookingReturnReminderSerializer, DressAvailabilitySerializer,
-    DressListSerializer, SearchFilterSerializer
+    BookingReturnReminderSerializer, DressListSerializer, 
+    SearchFilterSerializer
 )
 from .permissions import IsBookingOwnerOrAdmin
 from .utils import (
@@ -440,9 +439,6 @@ def check_dress_availability(request, dress_id):
     })
 
 
-
-from django.db.models import Count, Q
-from datetime import date
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
