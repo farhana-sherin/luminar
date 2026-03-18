@@ -11,7 +11,6 @@ export async function getCategories() {
 }
 
 
-
 // CREATE CATEGORY
 export async function createCategory(categoryData) {
   try {
