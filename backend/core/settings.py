@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     
 
     #local apps
-    'apps.users',
+    INSTALLED_APPS = [
+    ...
+    'apps.users.apps.UsersConfig',  # ✅ IMPORTANT
+]
     'apps.dresses',
     'apps.bookings',
     'apps.categories',
