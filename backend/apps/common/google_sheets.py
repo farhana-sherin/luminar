@@ -16,6 +16,7 @@ creds = Credentials.from_service_account_info(
     scopes=SCOPES
 )
 
+
 client = gspread.authorize(creds)
 
 SHEET_ID = "1dd387Yy7BRr1LuCPEJis227qnBMRCrsttPQseXEmg54"
