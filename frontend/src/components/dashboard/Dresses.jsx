@@ -322,6 +322,7 @@ export default function Dresses() {
                 </div>
                 
                 {/* Category Floating Badge */}
+                
                 <div className="absolute bottom-4 left-4">
                   <span className="px-3 py-1 bg-black/40 backdrop-blur-md text-white text-[10px] uppercase font-bold tracking-widest rounded-full border border-white/20">
                     {dress.category_name}
@@ -330,6 +331,7 @@ export default function Dresses() {
               </div>
 
               {/* Info Section (Metadata) */}
+
               <div className="p-6 space-y-4">
                 <div className="flex justify-between items-start gap-4">
                   <div className="flex-1 min-w-0">
@@ -341,6 +343,7 @@ export default function Dresses() {
                     </p>
                   </div>
                   <div className="text-right">
+                    
                     <p className="text-xl font-black text-slate-900">
                       ₹{Number(dress.price).toLocaleString()}
                     </p>
